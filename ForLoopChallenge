@@ -1,0 +1,74 @@
+// using the for statement, call the calculateInterest method with
+// the amount of 10000 with an interestRate of 2,3,4,5,6,7, and 8
+// and print the results to the console window.
+
+// How would you modify the for loop above to do the same thing as
+// shown but to start from 8% and work back to 2%
+
+// Create a for statement using any range of numbers
+// Determine if the number is a prime number using the isPrime method
+// if it is a prime number, print it out AND increment a count of the
+// number of prime numbers found
+// if that count is 3 exit the for loop
+// hint:  Use the break; statement to exit
+
+import java.util.Scanner;
+
+public class ForLoopChallenge {
+    public static void main(String[] arrrrrgs){ //ARRRR where be me rum?
+        float principle = 10000;
+
+        for(int i =2; i<9; i++){
+            System.out.println("Interest on $"+principle+" @ "+i+"% is: "+calculateInterest(principle, (float)i));
+        }
+
+        for(int i =8; i>1; i--){
+            System.out.println("Interest on $"+principle+" @ "+i+"% is: "+calculateInterest(principle, (float)i));
+        }
+
+        Scanner input = new Scanner(System.in);
+
+        System.out.print("Input a number to start at: ");
+        while(!input.hasNextInt()){
+            input.nextLine();
+            System.out.println("Invalid entry.");
+            System.out.print("Input a number to start at: ");
+        }
+        int a = input.nextInt();
+        input.nextLine();
+
+        System.out.print("Input a number to end at: ");
+        while(!input.hasNextInt()){
+            input.nextLine();
+            System.out.println("Invalid entry.");
+            System.out.print("Input a number to end at: ");
+        }
+        int b = input.nextInt();
+        input.nextLine();
+
+        int count = 0;
+        for(int i = a; i<=b; i++){
+            if(isPrime(i)){//checks for prime and runs if prime found
+                System.out.println("Prime number found: "+i);
+                count++;
+                if(count>2){
+                    break;//exits when count =3
+                }
+            }
+
+        }
+    }
+
+    static float calculateInterest(float principle, float rate){
+        return principle*(1+rate);
+    }
+
+    static boolean isPrime(int num){
+        for(int i = 2; i<(num/2); i++){
+            if(num%i == 0){
+                return false;//returns false if divisible by other than one and self
+            }
+        }
+        return true; // returns true if number is not divisible by anything but one and self
+    }
+}
