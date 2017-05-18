@@ -1,0 +1,123 @@
+	    // Create a new class for a bank account
+        // Create fields for the account number, balance, customer name, email and phone number.
+        //
+        // Create getters and setters for each field
+        // Create two additional methods
+        // 1. To allow the customer to deposit funds (this should increment the balance field).
+        // 2. To allow the customer to withdraw funds. This should deduct from the balance field,
+        // but not allow the withdrawal to complete if their are insufficient funds.
+        // You will want to create various code in the Main class (the one created by IntelliJ) to
+        // confirm your code is working.
+        // Add some System.out.println's in the two methods above as well.
+
+        // Create a new class VipCustomer
+        // it should have 3 fields name, credit limit, and email address.
+        // create 3 constructors
+        // 1st constructor empty should call the constructor with 3 parameters with default values
+        // 2nd constructor should pass on the 2 values it receives and add a default value for the 3rd
+        // 3rd constructor should save all fields.
+        // create getters only for this using code generation of intellij as setters wont be needed
+        // test and confirm it works.
+
+class ConstructorsChallenge{
+    public static void main(String[] arrrrgs){
+
+    }
+}
+
+class BankAccount{
+    private String name;
+    private String email;
+    private float balance;
+    private int phoneNumber;
+    private int accountNumber;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public float getBalance() {
+        return balance;
+    }
+
+    public void setBalance(float balance) {
+        this.balance = balance;
+    }
+
+    public int getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(int phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public int getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(int accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+
+    public void depositFunds(float depositAmount){
+        depositAmount = Math.abs(depositAmount);
+        this.balance+=depositAmount;
+        System.out.printf("$%.2f deposited, new balance is: $%.2f\n", depositAmount, this.balance);
+    }
+
+    public void withdrawFunds(float withdrawAmount){
+        if(this.balance<withdrawAmount){
+            System.out.println("Insufficient funds to process this transaction.");
+        }else{
+            this.balance-=withdrawAmount;
+            System.out.printf("$%.2f withdrawn, new balance is: $%.2f", withdrawAmount, this.balance);
+        }
+    }
+    
+    
+}
+
+class VIPCustomer{
+    private String name;
+    private String email;
+    private float creditLimit;
+
+    VIPCustomer(String name, String email, float creditLimit){
+        this.name = name;
+        this.email = email;
+        this.creditLimit = creditLimit;
+    }
+
+    VIPCustomer(String name){
+        this(name, "email@email.com", 0f);
+    }
+
+    VIPCustomer(){
+        this("","email@email.com", 0f);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public float getCreditLimit() {
+        return creditLimit;
+    }
+}
