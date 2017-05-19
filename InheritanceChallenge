@@ -1,0 +1,163 @@
+	    // Challenge.
+        // Start with a base class of a Vehicle, then create a Car class that inherits from this base class.
+        // Finally, create another class, a specific type of Car that inherits from the Car class.
+        // You should be able to hand steering, changing gears, and moving (speed in other words).
+        // You will want to decide where to put the appropriate state and behaviours (fields and methods).
+        // As mentioned above, changing gears, increasing/decreasing speed should be included.
+        // For you specific type of vehicle you will want to add something specific for that type of car.
+
+class InheritanceChallenge{
+    public static void main(String[] arrrrgs){
+        Vehicle myCar = new Fiesta(2015, 1, 5, true, 5, 0);
+        myCar.changeSpeed(45);
+        myCar.changeSpeed(-60);
+        myCar.changeDirection(90);
+        myCar.changeDirection(-180);
+        myCar.changeDirection(0);
+    }
+}
+
+/* Vehicle class
+    * Methods: speedUp
+    * Variables: speed, direction
+ */
+class Vehicle{
+    private int speed;
+    private int direction;
+
+    Vehicle(int speed, int direction){
+        this.speed = speed;
+        this.direction = direction;
+    }
+
+    Vehicle(){
+        this(0,0);
+    }
+
+    void changeSpeed(int deltaSpeed){
+        this.speed += deltaSpeed;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public int getDirection() {
+        return direction;
+    }
+
+    void changeDirection(int turnDegrees){
+        direction+=turnDegrees;
+    }
+}
+
+/* Car class
+    * Methods: changeGears, changeDirection
+    * Variables: gear
+ */
+class Car extends Vehicle{
+    private int gear;
+    private int maxGear;
+    private boolean isAutomatic;
+    private int[] gearShiftSpeeds = {-15,0,15,30,45,55,70};
+    private String[] gearNames = {"reverse", "first", "second", "third", "fourth", "fifth", "sixth"};
+
+    Car(int gear, int maxGear, boolean isAutomatic, int speed, int direction){
+        super(speed, direction);
+        this.maxGear = maxGear;
+        this.gear = setGear(super.getSpeed());
+        this.isAutomatic = isAutomatic;
+    }
+
+    Car(){
+        this(0,6,true,0,0);
+    }
+
+    @Override
+    void changeSpeed(int deltaSpeed) {
+        super.changeSpeed(deltaSpeed);
+        if(this.getSpeed() < -15){
+            deltaSpeed-=(-15-this.getSpeed()); // adjusts deltaSpeed to reflect final speed of -15
+            super.changeSpeed((-15-this.getSpeed()));//adjusts final speed to -15
+            System.out.println("Reduction in speed was too great, adjusting speed to -15mph");
+        }
+
+        if(deltaSpeed !=0)
+            changeGears(this.getSpeed(), deltaSpeed);
+
+    }
+
+    private int setGear(int speed){
+        if(speed > gearShiftSpeeds[maxGear]){
+            return maxGear;
+        }
+
+        for(int i = 0; i<6; i++){
+            if(speed >= gearShiftSpeeds[i] && speed<gearShiftSpeeds[i+1]){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    void changeGears(int finalSpeed, int speedChange){
+        int startGear;
+        int finalGear;
+        int increment;
+        startGear = setGear((finalSpeed-speedChange));
+        finalGear = setGear(finalSpeed);
+
+        if(finalGear<startGear){
+            increment = -1;
+        }else{
+            increment = 1;
+        }
+
+        for(int i = startGear; i!= finalGear+increment; i+=increment){
+            if(increment <0 && i == startGear){
+                continue;
+            }
+            if(isAutomatic){
+                System.out.println((((increment==1)?"Accelerating ":"Decelerating ")+"to "+gearShiftSpeeds[i])+" MPH.\nShift required:");
+                System.out.println("Shifting "+ ((increment == 1) ? "up ":"down ")+ "to "+ gearNames[i]+" gear");
+            }else{
+                System.out.println("Pressing clutch.");
+                System.out.println("Putting car into "+gearNames[i]+" gear.");
+                System.out.println("Releasing cluthc.");
+            }
+        }
+    }
+
+    @Override
+    void changeDirection(int turnDegrees) {
+
+        if(turnDegrees!=0){
+            super.changeDirection(turnDegrees);
+            if (turnDegrees < 0){
+                System.out.println("Turning right by "+ Math.abs(turnDegrees)+".");
+            }else{
+                System.out.println("Turning left by "+ turnDegrees+".");
+            }
+        }else{
+            System.out.println("Maintaining present course.");
+        }
+    }
+}
+
+/* FordFiesta class
+    * Methods:
+ */
+class Fiesta extends Car{
+    private int modelYear;
+
+    Fiesta(int modelYear, int gear, int maxGear, boolean isAutomatic, int speed, int direction){
+        super(gear, maxGear, isAutomatic, speed, direction);
+        this.modelYear = modelYear;
+    }
+
+    Fiesta(){
+        this(2017, 0, 6, true, 0, 0);
+    }
+
+
+}
