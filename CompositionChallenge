@@ -1,0 +1,97 @@
+        // Create a single room of a house using composition.
+        // Think about the things that should be included in the room.
+        // Maybe physical parts of the house but furniture as well
+        // Add at least one method to access an object via a getter and
+        // then that objects public method as you saw in the previous video
+        // then add at least one method to hide the object e.g. not using a getter
+        // but to access the object used in composition within the main class
+        // like you saw in this video.
+
+        class CompositionChallenge{
+    public static void main(String[] arrrrrrgs) {
+        Room myRoom = new Room(25, 50, 10, 4);
+        myRoom.getTV().togglePower();
+        myRoom.getTV().togglePower();
+
+        myRoom.getLamp().togglePower();
+        myRoom.getLamp().togglePower();
+    }
+}
+
+class Room{
+    private float width;
+    private float length;
+    private int walls;
+    private float height;
+    private Television TV;
+    private Furniture couch;
+    private LightSource lamp;
+
+    Room(float width, float length, float height, int walls){
+        this.width = width;
+        this.length = length;
+        this.height = height;
+        this.walls = walls;
+        TV = new Television();
+        couch = new Seating();
+        lamp = new LightSource();
+    }
+
+    public Television getTV() {
+        return TV;
+    }
+
+    public Furniture getCouch() {
+        return couch;
+    }
+
+    public LightSource getLamp() {
+        return lamp;
+    }
+}
+
+class Appliance{
+
+}
+
+class Television extends Appliance{
+    boolean isOn;
+
+    Television(){
+        isOn = false;
+    }
+
+    public void togglePower(){
+        isOn = !isOn;
+        if(isOn){
+            System.out.println("TV turning off.");
+        }else{
+            System.out.println("Turned off TV.");
+        }
+    }
+}
+
+class Furniture{
+
+}
+
+class Seating extends Furniture{
+
+}
+
+class LightSource extends Furniture{
+    boolean isOn;
+
+    LightSource(){
+        isOn = false;
+    }
+
+    public void togglePower(){
+        isOn = !isOn;
+        if(isOn){
+            System.out.println("Light is now on.");
+        }else{
+            System.out.println("Turned off the light.");
+        }
+    }
+}
