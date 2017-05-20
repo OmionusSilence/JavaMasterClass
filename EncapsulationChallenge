@@ -1,0 +1,41 @@
+        // Create a class and demonstate proper encapsulation techniques
+        // the class will be called Printer
+        // It will simulate a real Computer Printer
+        // It should have fields for the toner Level, number of pages printed, and
+        // also whether its a duplex printer (capable of printing on both sides of the paper).
+        // Add methods to fill up the toner (up to a maximum of 100%), another method to
+        // simulate printing a page (which should increase the number of pages printed).
+        // Decide on the scope, whether to use constructors, and anything else you think is needed.
+
+class EncapsulationChallenge{
+    public static void main(String[] arrrrggs){
+        Printer myPrinter = new Printer(.5f, false);
+    }
+}
+
+class Printer{
+    private float tonerLevel;
+    private int pagesPrinted;
+    private boolean isDuplex;
+
+    Printer(float tonerLevel, boolean isDuplex){
+        if(Math.abs(tonerLevel)>1){
+            this.tonerLevel = (Math.abs(tonerLevel)/100);
+        }else {
+            this.tonerLevel = Math.abs(tonerLevel);
+        }
+        this.isDuplex = isDuplex;
+    }
+
+    void fillToner(float amountToAdd){
+        tonerLevel+=amountToAdd;
+        if(tonerLevel>1){
+            tonerLevel = 1f;
+        }
+    }
+
+    void printPage(){
+        System.out.println("Printing page");
+        this.pagesPrinted++;
+    }
+}
