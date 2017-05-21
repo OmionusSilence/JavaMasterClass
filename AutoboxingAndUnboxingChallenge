@@ -1,0 +1,246 @@
+	    // You job is to create a simple banking application.
+        // There should be a Bank class
+        // It should have an arraylist of Branches
+        // Each Branch should have an arraylist of Customers
+        // The Customer class should have an arraylist of Doubles (transactions)
+        // Customer:
+        // Name, and the ArrayList of doubles.
+        // Branch:
+        // Need to be able to add a new customer and initial transaction amount.
+        // Also needs to add additional transactions for that customer/branch
+        // Bank:
+        // Add a new branch
+        // Add a customer to that branch with initial transaction
+        // Add a transaction for an existing customer for that branch
+        // Show a list of customers for a particular branch and optionally a list
+        // of their transactions
+        // Demonstration autoboxing and unboxing in your code
+        // Hint: Transactions
+        // Add data validation.
+        // e.g. check if exists, or does not exist, etc.
+        // Think about where you are adding the code to perform certain actions
+        // import java.util.ArrayList;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class AutoboxingAndUnboxingChallenge{
+
+    public static void main(String[] args) {
+        Bank myBank = new Bank("A Bank");
+        myBank.chooseMenuOne();
+    }
+
+
+}
+
+class Bank {
+    private ArrayList<Branch> branches;
+    private String name;
+    private static int numBranches;
+    Scanner input = new Scanner(System.in);
+
+    Bank(String name){
+        this.name = name;
+        branches = new ArrayList<>();
+    }
+
+    void addBranch(String name){
+        branches.add(new Branch(name, numBranches));
+        numBranches++;
+    }
+
+    void printBranches(){
+        for (int i =0; i<branches.size(); i++){
+            System.out.printf("Branch #%02d: %s\n", i, branches.get(i).getName());
+        }
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    void chooseMenuOne(){
+        int choice = 1;
+
+        while(choice == 1 || choice == 2) {
+            System.out.println("Choose from the following options:\n" +
+                    "1 - Add a branch\n" +
+                    "2 - Print a list of branches\n" +
+                    "3 - Quit\n");
+            choice = input.nextInt();
+            input.nextLine();
+
+            switch (choice) {
+                case 1:
+                    addBranch();
+                    break;
+                case 2:
+                    branchMenu();
+                    break;
+            }
+        }
+    }
+
+    void addBranch(){
+        String name;
+        System.out.println("Please input the name of the branch: ");
+        name = input.nextLine().trim();
+        addBranch(name);
+    }
+
+    void branchMenu(){
+        String choiceOne;
+        int choiceTwo;
+        printBranches();
+        System.out.println("Get more details about a branch? Y/N");
+        choiceOne = input.nextLine().toLowerCase().trim();
+
+        if(choiceOne.charAt(0) == 'y'){
+            System.out.println("Which branch number would you like more info about?");
+            choiceTwo = input.nextInt();
+            input.nextLine();
+            branches.get(choiceTwo).menu();
+        }
+    }
+}
+
+class Branch {
+    private ArrayList<Customer> customers;
+    private String name;
+    private int branchNum;
+    Scanner input = new Scanner(System.in);
+
+    Branch(String name, int branchNum){
+        this.customers = new ArrayList<>();
+        this.name = name;
+        this.branchNum = branchNum;
+    }
+
+    void addCustomer(String name, double initialBalance){
+        customers.add(new Customer(name, initialBalance));
+    }
+
+    void printCustomers(){
+        for(int i = 0; i<customers.size(); i++){
+            System.out.printf("Customer #%02d%05d: %s\n", branchNum, i, customers.get(i).getName());
+        }
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    void menu(){
+        int choice = 1;
+
+        while(choice == 1 || choice == 2) {
+            System.out.println("Choose from the following options:\n" +
+                    "1 - Add a customer\n" +
+                    "2 - Print a list of customers\n" +
+                    "3 - Quit\n");
+            choice = input.nextInt();
+            input.nextLine();
+
+            switch (choice) {
+                case 1:
+                    addCustomer();
+                    break;
+                case 2:
+                    customerMenu();
+                    break;
+            }
+        }
+    }
+
+    void addCustomer(){
+        String name;
+        double initial;
+        System.out.println("Please input the name of the customer: ");
+        name = input.nextLine().trim();
+        System.out.println("Input customer's initial balance: ");
+        initial = input.nextDouble();
+        input.nextLine();
+        addCustomer(name, initial);
+    }
+
+    void customerMenu(){
+        String choiceOne;
+        int choiceTwo;
+        printCustomers();
+        System.out.println("Get more details about a customer? Y/N");
+        choiceOne = input.nextLine().toLowerCase().trim();
+
+        if(choiceOne.charAt(0) == 'y'){
+            System.out.println("Which customer number would you like more info about?");
+            choiceTwo = input.nextInt();
+            input.nextLine();
+            customers.get(choiceTwo).menu();
+        }
+    }
+}
+
+class Customer {
+    private ArrayList<Double> transactions;
+    private String name;
+    double balance;
+    Scanner input = new Scanner(System.in);
+
+    Customer(String name, double initialBalance){
+        this.name = name;
+        this.transactions = new ArrayList<>();
+        this.transactions.add(initialBalance);
+        this.balance = initialBalance;
+    }
+
+    void addTransaction(){
+        double amount;
+
+        System.out.println("Input the value of the transaction to be processed");
+        amount = input.nextDouble();
+        input.nextLine();
+
+        if((amount*-1)>balance){
+            System.out.println("Insufficient funds to complete this transaction.");
+        }else{
+            this.balance+=amount;
+            this.transactions.add(amount);
+        }
+    }
+
+    void printTransactions(){
+        for(int i = 0; i<transactions.size(); i++){
+            if(transactions.get(i)>=0) {
+                System.out.printf("Transaction #%3d: $%.2f\n", i, transactions.get(i));
+            }else{
+                System.out.printf("Transaction #%3d: $(%.2f)\n", i, Math.abs(transactions.get(i)));
+            }
+        }
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    void menu(){
+        int choice = 1;
+
+        while(choice == 1 || choice == 2) {
+            System.out.println("Choose from the following options:\n" +
+                    "1 - Add a transaction\n" +
+                    "2 - Print a list of transactions\n" +
+                    "3 - Back\n");
+            choice = input.nextInt();
+            input.nextLine();
+
+            switch (choice) {
+                case 1:
+                    addTransaction();
+                    break;
+                case 2:
+                    printTransactions();
+                    break;
+            }
+        }
+    }
+}
