@@ -1,0 +1,77 @@
+	    // Create a program using arrays that sorts a list of integers in descending order.
+        // Descending order is highest value to lowest.
+        // In other words if the array had the values in it 106, 26, 81, 5, 15 your program should
+        // ultimately have an array with 106,81,26, 15, 5 in it.
+        // Set up the program so that the numbers to sort are read in from the keyboard.
+        // Implement the following methods - getIntegers, printArray, and sortIntegers
+        // getIntegers returns an array of entered integers from keyboard
+        // printArray prints out the contents of the array
+        // and sortIntegers should sort the array and return a new array containing the sorted numbers
+        // you will have to figure out how to copy the array elements from the passed array into a new
+        // array and sort them and return the new sorted array.
+
+        import java.util.Scanner;
+class ArrayChallenge{
+    static Scanner input = new Scanner(System.in);
+    public static void main(String[] ahoy_matey){
+        int[] anArray;
+        anArray = getIntegers();
+        System.out.println("Unsorted arrar:");
+        printArray(anArray);
+        sortIntegers(anArray);
+        System.out.println("\nSorted array:");
+        printArray(anArray);
+    }
+
+    static int[] getIntegers(){
+        int[] anInt = new int[1];
+        System.out.print("Input an integer: ");
+        anInt[0] = input.nextInt();
+        input.nextLine();
+        System.out.println("Add another int? y/n");
+        if(input.nextLine().toLowerCase().charAt(0) == 'y'){
+            return getIntegers(anInt);
+        }else{
+            return anInt;
+        }
+    }
+
+    static int[] getIntegers(int[] array){
+        int[] intArray = new int[array.length+1];
+        for(int i=0; i<array.length;i++){
+            intArray[i] = array[i];
+        }
+        System.out.print("Input an integer: ");
+        intArray[array.length] = input.nextInt();
+        input.nextLine();
+        System.out.println("Add another int? y/n");
+        if(input.nextLine().toLowerCase().charAt(0) == 'n'){
+            return intArray;
+        }else{
+            return getIntegers(intArray);
+        }
+    }
+
+    static void printArray(int[] array){
+        for(int i = 0; i<array.length; i++){
+            System.out.printf("Index %3d: %d\n", i, array[i]);
+        }
+    }
+
+    static void sortIntegers(int[] array){
+        boolean sortUnfinished = true;
+        int temp;
+
+        while(sortUnfinished){
+            sortUnfinished = false;
+            for (int i=1; i<array.length; i++){
+                if(array[i-1]> array[i]){
+                    temp = array[i];
+                    array[i]= array[i-1];
+                    array[i-1] = temp;
+                    sortUnfinished = true;
+                }
+            }
+        }
+    }
+}
