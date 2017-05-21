@@ -1,0 +1,474 @@
+        // The purpose of the application is to help a ficticious company called Bills Burgers to manage
+        // their process of selling hamburgers.
+        // Our application will help Bill to select types of burgers, some of the additional items (additions) to
+        // be added to the burgers and pricing.
+        // We want to create a base hamburger, but also two other types of hamburgers that are popular ones in
+        // Bills store.
+        // The basic hamburger should have the following items.
+        // bread roll type, meat and up to 4 additional additions (things like lettuce, tomato, carrot, etc) that
+        // the customer can select to be added to the burger. Each one of these items gets charged an additional
+        // price so you need some way to track how many items got added and to calculate the price (for the base
+        // burger and all the additions).
+        // This burger has a base price and the additions are all seperately priced.
+        // Create a Hamburger class to deal with all the above.
+        // The constructor should only include the roll type, meat and price.
+        // Also create two extra varieties of Hamburgers (classes) to cater for
+        // a) Healthy burger (on a brown rye bread roll), plus two addition items can be added.
+        // The healthy burger can have a total of 6 items (Additions) in total.
+        // hint:  you probably want to process the 2 additional items in this new class, not the base class,
+        // since the 2 additions are only appropriate for this new class.
+        // b) Deluxe hamburger - comes with chips and drinks as additions, but no extra additions are allowed.
+        // hint:  You have to find a way to automatically add these new additions at the time the deluxe burger
+        // object is created, and then prevent other additions being made.
+        //  All 3 classes should have a method that can be called anytime to show the base price of the hamburger
+        // plus all additionals, each showing the addition name, and addition price, and a grand total for the
+        // burger
+        // For the two additional classes this may require you to be looking at the base class for pricing and then
+        // adding totals onto that.
+
+        import java.util.Scanner;
+
+class OOPMasterChallenge{
+    static Scanner input = new Scanner(System.in);
+    public static void main(String[] arrrrrrrgggs){
+        Hamburger myBurger;
+        myBurger = chooseHamburger();
+        myBurger.displayBurger();
+    }
+
+    static Hamburger chooseHamburger(){
+        int choice;
+
+        System.out.println("Please select from the following options:\n" +
+                           "1 - Basic Burger\n" +
+                           "2 - Healthy Burger\n" +
+                           "3 - Deluxe Burger");
+        choice = input.nextInt();
+        input.nextLine();
+
+        switch(choice){
+            case 1:
+                return chooseExtras(1);
+            case 2:
+                return chooseExtras(2);
+            case 3:
+                return new DeluxeBurger();
+            default:
+                System.out.println("Invalid selection.");
+        }
+        return null;
+    }
+
+    static Hamburger chooseExtras(int type){
+        Extras[] extras;
+        int choice;
+        if(type == 1){
+            extras = new Extras[4];
+        }else{
+            extras = new Extras[6];
+        }
+
+        for(int i = 0; i<extras.length; i++){
+            System.out.println("Choose an extra from the following options:\n" +
+                    "1 - Chips\n" +
+                    "2 - French Fries\n" +
+                    "3 - Soda\n" +
+                    "4 - Tomato\n" +
+                    "5 - Lettuce\n" +
+                    "6 - Onion\n" +
+                    "7 - Mushroom\n" +
+                    "8 - Cheese\n");
+            choice = input.nextInt();
+            input.nextLine();
+
+            switch (choice){
+                case 1:
+                    extras[i]=new Chips();
+                    break;
+                case 2:
+                    extras[i] = new Fries();
+                    break;
+                case 3:
+                    extras[i] = new Drink();
+                    break;
+                case 4:
+                    extras[i] = new Tomato();
+                    break;
+                case 5:
+                    extras[i] = new Lettuce();
+                    break;
+                case 6:
+                    extras[i]= new Onion();
+                    break;
+                case 7:
+                    extras[i] = new Mushroom();
+                    break;
+                case 8:
+                    extras[i] = new Cheese();
+                    break;
+                default:
+                    System.out.println("Invalid choice.");
+
+            }
+        }
+        if(type == 1){
+            return new Hamburger(extras[0], extras[1], extras[2], extras[3], new SesameBun(), new Patty(true, .25f,1.0f));
+        }else{
+            return new HealthyBurger(extras[0], extras[1], extras[2],extras[3],extras[4],extras[5]);
+        }
+    }
+}
+
+class Bun {
+    float price;
+    boolean isHealthy;
+
+    public Bun(float price, boolean isHealthy) {
+        this.price = price;
+        this.isHealthy = isHealthy;
+    }
+
+    public float getPrice() {
+        return price;
+    }
+
+    public boolean isHealthy() {
+        return isHealthy;
+    }
+
+    @Override
+    public String toString() {
+        return "Basic Bun";
+    }
+}
+
+class BrownRye extends Bun {
+    public BrownRye() {
+        super(.30f, true);
+    }
+
+    @Override
+    public String toString() {
+        return "Brown Rye Bun";
+    }
+}
+
+class SesameBun extends Bun {
+    public SesameBun() {
+        super(.1f, false);
+    }
+
+    @Override
+    public String toString() {
+        return "Sesame Seed Bun";
+    }
+}
+
+
+
+class Extras{
+    float price;
+
+    public Extras(float price) {
+        this.price = price;
+    }
+
+    public float getPrice() {
+        return price;
+    }
+
+    @Override
+    public String toString() {
+        return "Extras";
+    }
+}
+
+class Chips extends Extras{
+    public Chips() {
+        super(1f);
+    }
+
+    @Override
+    public String toString() {
+        return "Chips";
+    }
+}
+
+class Drink extends Extras{
+    public Drink() {
+        super(1f);
+    }
+
+    @Override
+    public String toString() {
+        return "Soda";
+    }
+}
+
+class Tomato extends Extras {
+    public Tomato() {
+        super(.25f);
+    }
+
+    @Override
+    public String toString() {
+        return "Tomato";
+    }
+}
+
+class Lettuce extends Extras {
+    public Lettuce() {
+        super(.25f);
+    }
+
+    @Override
+    public String toString() {
+        return "Lettuce";
+    }
+}
+
+class Onion extends Extras {
+    public Onion() {
+        super(.25f);
+    }
+
+    @Override
+    public String toString() {
+        return "Onions";
+    }
+}
+
+class Fries extends Extras {
+    public Fries() {
+        super(1.5f);
+    }
+
+    @Override
+    public String toString() {
+        return "French Fries";
+    }
+}
+
+class Mushroom extends Extras {
+    public Mushroom() {
+        super(.25f);
+    }
+
+    @Override
+    public String toString() {
+        return "Mushroom";
+    }
+}
+
+class Cheese extends Extras {
+    public Cheese() {
+        super(.5f);
+    }
+
+    @Override
+    public String toString() {
+        return "Cheese";
+    }
+}
+
+class Patty {
+    private boolean isMeat;
+    private float weight;
+    private float price;
+
+    public Patty(boolean isMeat, float weight, float price) {
+        this.isMeat = isMeat;
+        this.weight = weight;
+        this.price = price;
+    }
+
+    public boolean isMeat() {
+        return isMeat;
+    }
+
+    public float getWeight() {
+        return weight;
+    }
+
+    public float getPrice() {
+        return price;
+    }
+
+    @Override
+    public String toString() {
+        return "Hamburger Patty";
+    }
+}
+
+class HealthyPatty extends Patty {
+    public HealthyPatty() {
+        super(false, .25f, 1.25f);
+    }
+
+    @Override
+    public String toString() {
+        return "Veggie Patty";
+    }
+}
+
+class DeluxePatty extends Patty {
+    public DeluxePatty() {
+        super(true, (float)(1/3), 1.5f);
+    }
+
+    @Override
+    public String toString() {
+        return "Deluxe 1/3rd lb Patty";
+    }
+}
+
+class Hamburger {
+    private float price;
+    private Extras extraOne;
+    private Extras extraTwo;
+    private Extras extraThree;
+    private Extras extraFour;
+    private Bun thisBun;
+    private Patty thisPatty;
+
+    public Hamburger(Extras extraOne, Extras extraTwo, Extras extraThree, Extras extraFour, Bun thisBun, Patty thisPatty) {
+        this.extraOne = extraOne;
+        this.extraTwo = extraTwo;
+        this.extraThree = extraThree;
+        this.extraFour = extraFour;
+        this.thisBun = thisBun;
+        this.thisPatty = thisPatty;
+        this.price = setPrice();
+    }
+
+    protected float setPrice() {
+        float price=0;
+
+        price+=extraOne.getPrice();
+        price+=extraTwo.getPrice();
+        price+=extraThree.getPrice();
+        price+= extraFour.getPrice();
+        price+=thisBun.getPrice();
+        price+=thisPatty.getPrice();
+
+        return price;
+    }
+
+    public float getPrice() {
+        return price;
+    }
+
+    public Extras getExtraOne() {
+        return extraOne;
+    }
+
+    public Extras getExtraTwo() {
+        return extraTwo;
+    }
+
+    public Extras getExtraThree() {
+        return extraThree;
+    }
+
+    public Extras getExtraFour() {
+        return extraFour;
+    }
+
+    public Bun getThisBun() {
+        return thisBun;
+    }
+
+    protected void setPrice(float price) {
+        this.price = price;
+    }
+
+    public Patty getThisPatty() {
+        return thisPatty;
+    }
+
+    @Override
+    public String toString() {
+        return "Basic Burger";
+    }
+
+    public void displayBurger(){
+        System.out.println(this.toString()+" total price: $"+this.getPrice());
+        System.out.println("\nItemized breakdown:\n\n");
+        System.out.println(this.getThisBun().toString()+": $"+this.getThisBun().getPrice());
+        System.out.println(this.getThisPatty().toString()+": $"+this.getThisPatty().getPrice());
+        System.out.println(this.getExtraOne().toString()+": $"+this.getExtraOne().getPrice());
+        System.out.println(this.getExtraTwo().toString()+": $"+this.getExtraTwo().getPrice());
+        System.out.println(this.getExtraThree().toString()+": $"+this.getExtraThree().getPrice());
+        System.out.println(this.getExtraFour().toString()+": $"+this.getExtraFour().getPrice());
+    }
+}
+
+class HealthyBurger extends Hamburger {
+    private Extras extraFive;
+    private Extras extraSix;
+
+    public HealthyBurger(Extras extraOne, Extras extraTwo, Extras extraThree, Extras extraFour, Extras extraFive, Extras extraSix) {
+        super(extraOne, extraTwo, extraThree, extraFour, new BrownRye(), new HealthyPatty());
+        this.extraFive = extraFive;
+        this.extraSix = extraSix;
+        this.setPrice(this.adjustPrice()); //super() calls set Price method prior to extraFive and extraSix init this compensates for that
+    }
+
+    public Extras getExtraFive() {
+        return extraFive;
+    }
+
+    public Extras getExtraSix() {
+        return extraSix;
+    }
+
+    @Override
+    public void displayBurger() {
+        super.displayBurger();
+        System.out.println(this.getExtraFive().toString()+": $"+this.getExtraFive().getPrice());
+        System.out.println(this.getExtraSix().toString()+": $"+this.getExtraSix().getPrice());
+    }
+
+    protected float adjustPrice() {
+        float price;
+        price = super.setPrice();
+        price+=this.extraFive.getPrice();
+        price+=this.extraSix.getPrice();
+        return price;
+    }
+
+    @Override
+    public String toString() {
+        return "Healthy Burger";
+    }
+}
+
+class DeluxeBurger extends Hamburger {
+    public DeluxeBurger() {
+        super(new Chips(), new Drink(), null, null, new SesameBun(), new DeluxePatty());
+    }
+
+    @Override
+    public void displayBurger() {
+        System.out.println(this.toString()+" total price: $"+this.getPrice());
+        System.out.println("\nItemized breakdown:\n\n");
+        System.out.println(this.getThisBun().toString()+": $"+this.getThisBun().getPrice());
+        System.out.println(this.getThisPatty().toString()+": $"+this.getThisPatty().getPrice());
+        System.out.println(this.getExtraOne().toString()+": $"+this.getExtraOne().getPrice());
+        System.out.println(this.getExtraTwo().toString()+": $"+this.getExtraTwo().getPrice());
+    }
+
+    protected float setPrice() {
+        float price = 0;
+        price+=getExtraOne().getPrice();
+        price+=getExtraTwo().getPrice();
+        price+=getThisBun().getPrice();
+        price+=getThisPatty().getPrice();
+        return price;
+    }
+
+    @Override
+    public String toString() {
+        return "Deluxe Burger";
+    }
+}
