@@ -1,0 +1,271 @@
+    // Modify the playlist challenge so that the Album class uses an inner class.
+    // Instead of using an ArrayList to hold its tracks, it will use an inner class called SongList
+    // The inner SongList class will use an ArrayList and will provide a method to add a song.
+    // It will also provide findSong() methods which will be used by the containing Album class
+    // to add songs to the playlist.
+    // Neither the Song class or the Main class should be changed.
+
+    import java.util.ArrayList;
+    import java.util.LinkedList;
+    import java.util.ListIterator;
+    import java.util.Scanner;
+
+    class InnerClassChallenge implements AlbumData{
+
+        public static void main(String[] arrrrrr_me_eye) {
+            Scanner input = new Scanner(System.in);
+            int choice = 0;
+            MusicPlayer myPlayer = new MusicPlayer();
+            myPlayer.generateAlbum(metallica[1],metallica[0], metallicaSongs[0], metallicaDurations[0]);
+            myPlayer.generateAlbum(metallica[2],metallica[0], metallicaSongs[1], metallicaDurations[1]);
+            myPlayer.generateAlbum(metallica[3],metallica[0], metallicaSongs[2], metallicaDurations[2]);
+
+            System.out.println("How many songs would you like to add to the playlist? ");
+            choice = input.nextInt();
+            input.nextLine();
+            myPlayer.generatePlaylist(choice);
+
+            for(int i = 0; i<myPlayer.getPlayList().size(); i++){
+                System.out.println(myPlayer.getPlayList().get(i).getTitle());
+            }
+            myPlayer.play();
+        }
+    }
+
+    class Song{
+        private String title;
+        private float duration;
+
+        Song(String title, float duration){
+            this.title = title;
+            this.duration = duration;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public float getDuration() {
+            return duration;
+        }
+
+
+    }
+
+    class Album{
+
+        private String name;
+        private String artist;
+        private SongList albumTracks;
+
+        Album(String name, String artist){
+            this.name = name;
+            this.artist = artist;
+            albumTracks = new SongList();
+        }
+
+
+
+        public String getName() {
+            return name;
+        }
+
+        public String getArtist() {
+            return artist;
+        }
+
+        public SongList getAlbumTracks() {
+            return albumTracks;
+        }
+
+        public Song findSong(){
+            return this.albumTracks.getSong();
+        }
+
+        class SongList{
+            ArrayList<Song> songs;
+
+            SongList(){
+                songs = new ArrayList<>();
+            }
+
+            void addSong(String title, float duration){
+                songs.add(new Song(title, duration));
+            }
+
+            public ArrayList<Song> getSongs() {
+                return songs;
+            }
+
+            Song getSong(){
+                return songs.get((int)(Math.random()*songs.size()));
+            }
+        }
+    }
+
+    class MusicLibrary{
+        ArrayList<Album> library;
+
+        MusicLibrary(){
+            library = new ArrayList<>();
+        }
+
+        void addAlbum(String name, String artist){
+            library.add(new Album(name, artist));
+        }
+
+        Album getAlbum(int index){
+            return library.get(index);
+        }
+
+        public ArrayList<Album> getLibrary() {
+            return library;
+        }
+
+        Song getSong(){
+            return library.get((int)(Math.random()*library.size())).findSong();
+        }
+    }
+
+    class MusicPlayer{
+        private LinkedList<Song> playList;
+        private MusicLibrary myLibrary;
+
+
+        MusicPlayer(){
+            playList = new LinkedList<>();
+            myLibrary = new MusicLibrary();
+        }
+        void generateAlbum(String albumName, String artistName, String[] albumSongs, float[] songDurations){
+            myLibrary.addAlbum(albumName, artistName);
+            for(int i = 0; i<albumSongs.length; i++) {
+                myLibrary.getAlbum(myLibrary.getLibrary().size() - 1).getAlbumTracks().addSong(albumSongs[i], songDurations[i]);
+            }
+        }
+
+        public MusicLibrary getMyLibrary() {
+            return myLibrary;
+        }
+
+        void generatePlaylist(int size){
+            while(playList.size()<size){
+                playList.add(myLibrary.getSong());
+            }
+        }
+
+        public LinkedList<Song> getPlayList() {
+            return playList;
+        }
+
+        void play(){
+            Scanner input = new Scanner(System.in);
+            ListIterator<Song> controls = playList.listIterator();
+            Song temp;
+            boolean forward = true;
+            boolean quit = false;
+
+            if(playList.size()==0){
+                System.out.println("No songs in playlist.");
+            }else{
+                temp = controls.next();
+                System.out.println("Now playing: \"" + temp.getTitle() + "\" : "+((int)temp.getDuration())/60+":"+((int)temp.getDuration())%60);
+            }
+
+            while(!quit){
+                int choice = input.nextInt();
+                input.nextLine();
+
+                switch(choice){
+                    case 1:
+                        if(!forward){
+                            if(controls.hasNext()){
+                                controls.next();
+                            }
+                            forward = true;
+                        }
+                        if (controls.hasNext()){
+                            temp = controls.next();
+                            System.out.println("Now playing: \"" + temp.getTitle() + "\" : "+((int)temp.getDuration())/60+":"+((int)temp.getDuration())%60);
+                        }else{
+                            System.out.println("End of playlist.");
+                            forward = false;
+                        }
+                        break;
+                    case 2:
+                        if(forward){
+                            if(controls.hasPrevious()){
+                                controls.previous();
+                            }
+                            forward = false;
+                        }
+                        if (controls.hasPrevious()){
+                            temp = controls.previous();
+                            System.out.println("Now playing: \"" + temp.getTitle() + "\" : "+((int)temp.getDuration())/60+":"+((int)temp.getDuration())%60);
+                        }else{
+                            System.out.println("End of playlist.");
+                            forward = false;
+                        }
+                        break;
+                    case 3:
+                        if(!forward){
+                            temp = controls.next();
+                            System.out.println("Now playing: \"" + temp.getTitle() + "\" : "+((int)temp.getDuration())/60+":"+((int)temp.getDuration())%60);
+                            forward = true;
+                        }else if(forward){
+                            temp = controls.previous();
+                            System.out.println("Now playing: \"" + temp.getTitle() + "\" : "+((int)temp.getDuration())/60+":"+((int)temp.getDuration())%60);
+                            forward = false;
+                        }
+
+                        break;
+                    case 4:
+                        printList(playList);
+                        break;
+                    case 5:
+                        printMenu();
+                        break;
+                    default:
+                        quit = true;
+                }
+            }
+        }
+
+        void printList(LinkedList<Song> playList){
+            ListIterator<Song> aList = playList.listIterator();
+            Song temp;
+            while(aList.hasNext()){
+                temp = aList.next();
+                System.out.println("\"" + temp.getTitle() + "\" : "+((int)temp.getDuration())/60+":"+((int)temp.getDuration())%60);
+            }
+        }
+
+        void printMenu(){
+            System.out.println("Virtual Media Player Menu:\n" +
+                    "1 - Play next song\n" +
+                    "2 - Play previous song\n" +
+                    "3 - Replay current song\n" +
+                    "4 - Print playlist\n" +
+                    "5 - Reprint these options\n" +
+                    "Any other number to quit");
+        }
+    }
+
+    interface AlbumData {
+        String[] metallica = {"Metallica", "Black Album", "Hardwired... to Self-Destruct", "Master of Puppets"};
+        String[][] metallicaSongs = {{"Enter Sandman", "Sad But True", "Holier Than Thou",
+                "The Unforgiven", "Wherever I May Roam", "Don't Tread on Me", "Through the Never",
+                "Nothing Else Matters", "Of Wolf and Man", "The God That Failed", "My Friend Misery",
+                "The Struggle Within"},
+                {"Hardwired", "Atlas, Rise!", "Now That We're Dead",
+                        "Moth into Flame", "Dream No More", "Halo on Fire",
+                        "Confusion", "ManUNkind", "Here Comes Revenge",
+                        "Am I Savage?", "Murder One", "Spit Out the Bone",
+                        "Lords of Summer"},
+                {"Battery", "Master of Puppets", "The Thing That Should Not Be",
+                        "Welcome Home (Sanitarium)", "Disposable Heroes", "Leper Messiah",
+                        "Orion", "Damage, Inc."}};
+        float[][] metallicaDurations = {{329f, 324f, 227f, 386f, 402f, 239f, 241f, 389f, 256f, 305f, 407f, 231f},
+                {189f, 388f, 419f, 350f, 389f, 495f, 401f, 415f, 437f, 389f, 345f, 429f, 430f},
+                {312f,516f,397f,207f,497f,340f,508f,329f}};
+
+    }
