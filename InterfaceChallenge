@@ -1,0 +1,248 @@
+        // Create a simple interface that allows an object to be saved to some sort of storage medium.
+        // The exact type of medium is not known to the interface (nor to the classes that implement it).
+        // The interface will just specify 2 methods, one to return an ArrayList of values to be saved
+        // and the other to populate the object's fields from an ArrayList.
+        //
+        // Create some sample classes that implement your saveable interface (we've used the idea of a game,
+        // with Players and Monsters, but you can create any type of classes that you want).
+        //
+        // Override the toString() method for each of your classes so that they can be easily printed to enable
+        // the program to be tested easier.
+        //
+        // In Main, write a method that takes an object that implements the interface as a parameter and
+        // "saves" the values.
+        // We haven't covered I/O yet, so your method should just print the values to the screen.
+        // Also in Main, write a method that restores the values to a saveable object.
+        // Again, we are not going to use Java file I/O; instead use the readValues() method below to
+        // simulate getting values from a file – this allows you to type as many values as your class
+        // requires, and returns an ArrayList.
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+class InterfaceChallenge{
+    public static void main(String[] args) {
+        Player me = new Player("Sherlock", 50, 25);
+        System.out.println(me.toString());
+        saveObject(me);
+
+        me.setHP(10);
+        System.out.println(me);
+        me.setWeapon("Excaliber");
+        System.out.println(me);
+        loadObject(me);
+        System.out.println(me);
+
+        World thisWorld = new World(25, 250, false, false);
+        System.out.println(thisWorld);
+        saveObject(thisWorld);
+
+        thisWorld.setHaveAirship(true);
+        thisWorld.setWorldOfRuin(true);
+        System.out.println(thisWorld);
+
+        loadObject(thisWorld);
+        System.out.println(thisWorld);
+    }
+
+    public static ArrayList<String> readValues(){
+        ArrayList<String> values = new ArrayList<>();
+
+        Scanner input = new Scanner(System.in);
+        boolean run = true;
+        int choice;
+        String string;
+
+        while(run){
+            System.out.println("Choose from the following:\n" +
+                    "1 - Enter data\n" +
+                    "0 - Quit");
+            choice = input.nextInt();
+            input.nextLine();
+
+            switch (choice){
+                case 0:
+                    run = false;
+                    break;
+                case 1:
+                    System.out.print("Enter data: ");
+                    string = input.nextLine().trim();
+                    values.add(string);
+                    break;
+
+            }
+        }
+        return values;
+    }
+
+    public static void saveObject(Savable objectToSave){
+        for(int i = 0; i<objectToSave.write().size(); i++){
+            System.out.println("Saving "+ objectToSave.write().get(i) + " to storage device.");
+        }
+    }
+
+    public static void loadObject(Savable objectToLoad){
+        ArrayList<String> values = readValues();
+        objectToLoad.read(values);
+    }
+}
+
+interface Savable{
+    List<String> write();
+    void read(List<String> data);
+}
+
+class Player implements Savable{
+    private String name;
+    private int HP;
+    private int strength;
+    private String weapon;
+
+    public Player(String name, int HP, int strength) {
+        this.name = name;
+        this.HP = HP;
+        this.strength = strength;
+        this.weapon = "Sword";
+    }
+
+    @Override
+    public List<String> write() {
+        List<String> values = new ArrayList<>();
+        values.add(this.name);
+        values.add(""+this.HP);
+        values.add(""+this.strength);
+        values.add(this.weapon);
+        return values;
+    }
+
+    @Override
+    public void read(List<String> data) {
+        if(data != null && data.size()>0){
+            this.name = data.get(0);
+            this.HP = Integer.parseInt(data.get(1));
+            this.strength = Integer.parseInt(data.get(2));
+            this.weapon = data.get((3));
+        }
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getHP() {
+        return HP;
+    }
+
+    public void setHP(int HP) {
+        this.HP = HP;
+    }
+
+    public int getStrength() {
+        return strength;
+    }
+
+    public void setStrength(int strength) {
+        this.strength = strength;
+    }
+
+    public String getWeapon() {
+        return weapon;
+    }
+
+    public void setWeapon(String weapon) {
+        this.weapon = weapon;
+    }
+
+    @Override
+    public String toString() {
+        return "player{" +
+                "name='" + name + '\'' +
+                ", HP=" + HP +
+                ", strength=" + strength +
+                ", weapon='" + weapon + '\'' +
+                '}';
+    }
+}
+
+class World implements Savable {
+    private int xPos;
+    private int yPos;
+    private boolean haveAirship;
+    private boolean worldOfRuin;
+
+    public World(int xPos, int yPos, boolean haveAirship, boolean worldOfRuin) {
+        this.xPos = xPos;
+        this.yPos = yPos;
+        this.haveAirship = haveAirship;
+        this.worldOfRuin = worldOfRuin;
+    }
+
+    public int getxPos() {
+        return xPos;
+    }
+
+    public void setxPos(int xPos) {
+        this.xPos = xPos;
+    }
+
+    public int getyPos() {
+        return yPos;
+    }
+
+    public void setyPos(int yPos) {
+        this.yPos = yPos;
+    }
+
+    public boolean isHaveAirship() {
+        return haveAirship;
+    }
+
+    public void setHaveAirship(boolean haveAirship) {
+        this.haveAirship = haveAirship;
+    }
+
+    public boolean isWorldOfRuin() {
+        return worldOfRuin;
+    }
+
+    public void setWorldOfRuin(boolean worldOfRuin) {
+        this.worldOfRuin = worldOfRuin;
+    }
+
+    @Override
+    public List<String> write() {
+        List<String> values = new ArrayList<>();
+        values.add(""+this.xPos);
+        values.add(""+this.yPos);
+        values.add(""+this.haveAirship);
+        values.add(""+this.worldOfRuin);
+        return values;
+    }
+
+    @Override
+    public void read(List<String> data) {
+        if(data != null && data.size()>0){
+            this.xPos = Integer.parseInt(data.get(0));
+            this.yPos = Integer.parseInt(data.get(1));
+            this.haveAirship = Boolean.parseBoolean(data.get(2));
+            this.worldOfRuin = Boolean.parseBoolean(data.get(3));
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "World{" +
+                "xPos=" + xPos +
+                ", yPos=" + yPos +
+                ", haveAirship=" + haveAirship +
+                ", worldOfRuin=" + worldOfRuin +
+                '}';
+    }
+}
+
+
